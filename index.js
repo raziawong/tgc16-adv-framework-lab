@@ -12,7 +12,9 @@ const csrf = require("csurf");
 const app = express();
 app.set("view engine", "hbs");
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 
 waxOn.on(hbs.handlebars);
 waxOn.setLayoutPath("./views/layouts");
@@ -32,7 +34,7 @@ app.use((req, res, next) => {
 app.use(
   session({
     store: new FileStore(),
-    secret: "keyboard cat",
+    secret: process.env.SESSION_SECRET_KEY,
     resave: false,
     saveUninitialized: true,
   })
@@ -70,7 +72,9 @@ app.use(function (err, req, res, next) {
 });
 
 // import in the CheckIfAuthenticated middleware
-const { checkIfAuthenticated } = require("./middlewares");
+const {
+  checkIfAuthenticated
+} = require("./middlewares");
 
 // import routes
 const landingRoutes = require("./routes/landing");

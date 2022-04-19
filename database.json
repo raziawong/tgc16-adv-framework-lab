@@ -1,8 +1,19 @@
 {
   "dev": {
-    "driver": "mysql",
-    "user": "foo",
-    "password": "foobarPW@",
-    "database": "tgc16_poster_shop"
+    "driver": {
+      "ENV": "DB_DRIVER"
+    },
+    "user": {
+      "ENV": "DB_USER"
+    },
+    "password": {
+      "ENV": "DB_PASSWORD"
+    },
+    "database": {
+      "ENV": "DB_NAME"
+    },
+    "host": {
+      "ENV": "DB_HOST"
+    }
   }
 }

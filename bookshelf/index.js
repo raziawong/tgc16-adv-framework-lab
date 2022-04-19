@@ -2,12 +2,13 @@
 // we call immediately with an object as the first argument
 
 const knex = require("knex")({
-  client: "mysql",
+  client: process.env.DB_DRIVER,
   connection: {
-    user: "foo",
-    password: "foobarPW@",
-    database: "tgc16_poster_shop",
-  },
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST
+  }
 });
 
 const bookshelf = require("bookshelf")(knex);
