@@ -1,8 +1,8 @@
 {
-  "name": "tgc16-advanced-framework-lab",
+  "name": "tgc16-adv-framework-lab",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/raziawong/tgc16-advanced-framework-lab.git",
+  "repository": "https://github.com/raziawong/tgc16-adv-framework-lab.git",
   "author": "Razia <nrwpc.stack@gmail.com>",
   "license": "MIT",
   "dependencies": {
