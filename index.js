@@ -84,7 +84,7 @@ const cloudinaryRoutes = require("./routes/cloudinary.js");
   });
 
   app.use("/landing", landingRoutes);
-  app.use("/posters", checkIfAuthenticated, posterRoutes);
+  app.use("/posters", posterRoutes);
   app.use("/users", userRoutes);
   app.use("/cloudinary", checkIfAuthenticated, cloudinaryRoutes);
 })();
