@@ -1,6 +1,7 @@
 const express = require("express");
 const { Poster, MediaProperty, Tag } = require("../models");
 const { bootstrapField, createPosterForm } = require("../forms");
+const { checkIfAuthenticated } = require("../middlewares");
 
 // create the new router
 const router = express.Router();
@@ -36,7 +37,7 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/create", async (req, res) => {
+router.get("/create", checkIfAuthenticated, async (req, res) => {
   const posterForm = createPosterForm(
     await getAllMediaProperties(),
     await getAllTags()
@@ -50,7 +51,7 @@ router.get("/create", async (req, res) => {
   });
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", checkIfAuthenticated, async (req, res) => {
   const posterForm = createPosterForm(
     await getAllMediaProperties(),
     await getAllTags()
@@ -79,7 +80,7 @@ router.post("/create", async (req, res) => {
   });
 });
 
-router.get("/:id/update", async (req, res) => {
+router.get("/:id/update", checkIfAuthenticated, async (req, res) => {
   const poster = await getPosterById(req.params.id);
   let posterForm = createPosterForm(
     await getAllMediaProperties(),
@@ -98,7 +99,7 @@ router.get("/:id/update", async (req, res) => {
   });
 });
 
-router.post("/:id/update", async (req, res) => {
+router.post("/:id/update", checkIfAuthenticated, async (req, res) => {
   const poster = await getPosterById(req.params.id);
   const posterForm = createPosterForm(
     await getAllMediaProperties(),
@@ -128,14 +129,14 @@ router.post("/:id/update", async (req, res) => {
   });
 });
 
-router.get("/:id/delete", async (req, res) => {
+router.get("/:id/delete", checkIfAuthenticated, async (req, res) => {
   const poster = await getPosterById(req.params.id);
   res.render("posters/delete", {
     poster: poster.toJSON(),
   });
 });
 
-router.post("/:id/delete", async (req, res) => {
+router.post("/:id/delete", checkIfAuthenticated, async (req, res) => {
   const poster = await getPosterById(req.params.id);
   await poster.destroy();
   res.redirect("/posters");
