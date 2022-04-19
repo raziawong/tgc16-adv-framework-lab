@@ -1,6 +1,10 @@
 // import in caolan forms
 const forms = require("forms");
-const { fields, validators, widgets } = forms;
+const {
+  fields,
+  validators,
+  widgets
+} = forms;
 
 var bootstrapField = function (name, object) {
   if (!Array.isArray(object.widget.classes)) {
@@ -18,9 +22,9 @@ var bootstrapField = function (name, object) {
   }
 
   var label = object.labelHTML(name);
-  var error = object.error
-    ? '<div class="invalid-feedback">' + object.error + "</div>"
-    : "";
+  var error = object.error ?
+    '<div class="invalid-feedback">' + object.error + "</div>" :
+    "";
 
   var widget = object.widget.toHTML(name, object);
   return '<div class="col-12 mb-3">' + label + widget + error + "</div>";
@@ -158,7 +162,7 @@ const createLoginForm = () => {
 
 const createSearchForm = (mediaProperties, tags) => {
   return forms.create({
-    name: fields.string({
+    title: fields.string({
       required: false,
       errorAfterField: true,
       cssClasses: {
@@ -208,4 +212,5 @@ module.exports = {
   createPosterForm,
   createRegisterForm,
   createLoginForm,
+  createSearchForm
 };

@@ -1,7 +1,17 @@
 const express = require("express");
-const { Poster, MediaProperty, Tag } = require("../models");
-const { bootstrapField, createPosterForm } = require("../forms");
-const { checkIfAuthenticated } = require("../middlewares");
+const {
+  Poster,
+  MediaProperty,
+  Tag
+} = require("../models");
+const {
+  bootstrapField,
+  createPosterForm,
+  createSearchForm
+} = require("../forms");
+const {
+  checkIfAuthenticated
+} = require("../middlewares");
 
 // create the new router
 const router = express.Router();
@@ -28,13 +38,80 @@ async function getAllTags() {
   return allTags;
 }
 
-router.get("/", async (req, res) => {
-  const posters = await Poster.collection().fetch({
-    withRelated: ["mediaProperty", "tags"],
-  });
-  res.render("posters/index", {
-    posters: posters.toJSON(),
-  });
+// router.get("/", async (req, res) => {
+//   const posters = await Poster.collection().fetch({
+//     withRelated: ["mediaProperty", "tags"],
+//   });
+//   res.render("posters/index", {
+//     posters: posters.toJSON(),
+//   });
+// });
+
+router.get('/', async (req, res) => {
+
+  // 1. get all the media properties
+  const allMediaProperties = await getAllMediaProperties();
+  allMediaProperties.unshift(["", "Please select"]);
+
+  // 2. get all the tags
+  const allTags = await getAllTags();
+
+  // 3. create search form 
+  const searchForm = createSearchForm(allMediaProperties, allTags);
+  let collection = await Poster.collection();
+
+  searchForm.handle(req, {
+    empty: async (form) => {
+      let posters = await collection.fetch({
+        withRelated: ["mediaProperty", "tags"]
+      });
+      res.render("posters/index", {
+        posters: posters.toJSON(),
+        form: form.toHTML(bootstrapField)
+      });
+    },
+    error: async (form) => {
+      let posters = await collection.fetch({
+        withRelated: ["mediaProperty", "tags"]
+      });
+      res.render('products/index', {
+        posters: posters.toJSON(),
+        form: form.toHTML(bootstrapField)
+      });
+    },
+    success: async (form) => {
+      if (form.data.title) {
+        collection = collection.where('title', 'like', '%' + req.query.title + '%')
+      }
+
+      if (form.data.media_property_id) {
+        collection = collection.query('join', 'media_properties', 'media_property_id', 'media_properties.id')
+          .where('media_properties.id', '=', req.query.media_property_id)
+      }
+
+      if (form.data.min_cost) {
+        collection = collection.where('cost', '>=', req.query.min_cost)
+      }
+
+      if (form.data.max_cost) {
+        collection = collection.where('cost', '<=', req.query.max_cost);
+      }
+
+      if (form.data.tags) {
+        console.log(form.data.tags);
+        collection.query('join', 'posters_tags', 'posters.id', 'poster_id')
+          .where('tag_id', 'in', form.data.tags.split(','))
+      }
+
+      let posters = await collection.fetch({
+        withRelated: ["mediaProperty", "tags"]
+      });
+      res.render("posters/index", {
+        posters: posters.toJSON(),
+        form: form.toHTML(bootstrapField)
+      });
+    }
+  })
 });
 
 router.get("/create", checkIfAuthenticated, async (req, res) => {
@@ -58,7 +135,10 @@ router.post("/create", checkIfAuthenticated, async (req, res) => {
   );
   posterForm.handle(req, {
     success: async (form) => {
-      let { tags, ...inputs } = form.data;
+      let {
+        tags,
+        ...inputs
+      } = form.data;
       const poster = new Poster();
       poster.set(inputs);
       await poster.save();
@@ -86,9 +166,15 @@ router.get("/:id/update", checkIfAuthenticated, async (req, res) => {
     await getAllMediaProperties(),
     await getAllTags()
   );
-  let { tags, ...dbData } = poster.attributes;
+  let {
+    tags,
+    ...dbData
+  } = poster.attributes;
   let selTags = await poster.related("tags").pluck("id");
-  posterForm = posterForm.bind({ ...dbData, tags: selTags });
+  posterForm = posterForm.bind({
+    ...dbData,
+    tags: selTags
+  });
 
   res.render("posters/update", {
     form: posterForm.toHTML(bootstrapField),
@@ -107,7 +193,10 @@ router.post("/:id/update", checkIfAuthenticated, async (req, res) => {
   );
   posterForm.handle(req, {
     success: async (form) => {
-      let { tags, ...inputs } = form.data;
+      let {
+        tags,
+        ...inputs
+      } = form.data;
       poster.set(inputs);
       poster.save();
 

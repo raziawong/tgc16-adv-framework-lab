@@ -14,5 +14,8 @@
    },
    "files.autoSave": "off",
    "workbench.colorTheme": "Mayukai Midnight",
-   "editor.defaultFormatter": "HookyQR.beautify"
+   "editor.defaultFormatter": "HookyQR.beautify",
+   "[handlebars]": {
+      "editor.defaultFormatter": "vscode.html-language-features"
+   }
 }
