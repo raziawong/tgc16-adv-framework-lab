@@ -81,6 +81,7 @@ const landingRoutes = require("./routes/landing");
 const posterRoutes = require("./routes/posters");
 const userRoutes = require("./routes/users");
 const cloudinaryRoutes = require("./routes/cloudinary.js");
+const cartRoutes = require("./routes/shoppingCart");
 
 (async function () {
   app.get("/", function (req, res) {
@@ -91,6 +92,7 @@ const cloudinaryRoutes = require("./routes/cloudinary.js");
   app.use("/posters", posterRoutes);
   app.use("/users", userRoutes);
   app.use("/cloudinary", checkIfAuthenticated, cloudinaryRoutes);
+  app.use("/cart", checkIfAuthenticated, cartRoutes);
 })();
 
 // ------------ 03 LISTEN

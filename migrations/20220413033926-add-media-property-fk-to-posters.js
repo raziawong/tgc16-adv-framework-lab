@@ -30,7 +30,7 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-  db.removeForeignKey("posters", "poster_media_property_fk");
+  return db.removeForeignKey("posters", "poster_media_property_fk");
 };
 
 exports._meta = {

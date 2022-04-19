@@ -49,6 +49,8 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
+  db.removeForeignKey("posters_tags", "posters_tags_poster_fk");
+  db.removeForeignKey("posters_tags", "posters_tags_tag_fk");
   return db.dropTable("posters_tags");
 };
 
