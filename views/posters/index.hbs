@@ -1,0 +1,58 @@
+{{#extends "base"}}
+
+  {{#block "content"}}
+    <div class="row justify-content-between">
+      <div class="col-4">
+        <h1 class="display-3">Posters</h1>
+      </div>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Title</th>
+          <th>Cost</th>
+          <th>Stock</th>
+          <th>Height</th>
+          <th>Width</th>
+          <th>Description</th>
+          <th>Media Properties</th>
+          <th>Tags</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each posters}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.date}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.cost}}</td>
+            <td>{{this.stock}}</td>
+            <td>{{this.height}}</td>
+            <td>{{this.width}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.mediaProperty.name}}</td>
+            <td>
+              {{#each this.tags}}
+                <span class="m-1 badge bg-info">{{this.name}}</span>
+              {{/each}}
+            </td>
+            <td>
+              <a
+                class="btn btn-sm btn-primary mb-1"
+                href="/posters/{{this.id}}/update"
+              >Update</a>
+              <a
+                class="btn btn-sm btn-secondary mb-1"
+                href="/posters/{{this.id}}/delete"
+              >Delete</a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  {{/block}}
+{{/extends}}
