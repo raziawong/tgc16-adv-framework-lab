@@ -98,6 +98,6 @@ const checkoutRoutes = require("./routes/checkout");
 })();
 
 // ------------ 03 LISTEN
-app.listen(3355, function () {
+app.listen(process.env.PORT, function () {
   console.log("Server has started");
 });
