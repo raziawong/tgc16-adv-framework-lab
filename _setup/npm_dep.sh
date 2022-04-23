@@ -1,7 +1,7 @@
 yarn add express
 yarn add hbs
 yarn add wax-on
-arn add db-migrate
+yarn add db-migrate
 yarn add db-migrate-mysql
 yarn add dotenv
 yarn add mysql
